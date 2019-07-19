@@ -3,8 +3,8 @@ package com.danikula.videocache;
 import android.content.Context;
 import android.os.Environment;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+
 
 import java.io.File;
 
@@ -20,7 +20,7 @@ import static android.os.Environment.MEDIA_MOUNTED;
  */
 final class StorageUtils {
 
-    private static final Logger LOG = LoggerFactory.getLogger("StorageUtils");
+    private static final String TAG = "StorageUtils";
     private static final String INDIVIDUAL_DIR_NAME = "video-cache";
 
     /**
@@ -63,7 +63,7 @@ final class StorageUtils {
         }
         if (appCacheDir == null) {
             String cacheDirPath = "/data/data/" + context.getPackageName() + "/cache/";
-            LOG.warn("Can't define system cache directory! '" + cacheDirPath + "%s' will be used.");
+            LOG.warn(TAG, "Can't define system cache directory! '" + cacheDirPath + "%s' will be used.");
             appCacheDir = new File(cacheDirPath);
         }
         return appCacheDir;
@@ -74,7 +74,7 @@ final class StorageUtils {
         File appCacheDir = new File(new File(dataDir, context.getPackageName()), "cache");
         if (!appCacheDir.exists()) {
             if (!appCacheDir.mkdirs()) {
-                LOG.warn("Unable to create external cache directory");
+                LOG.warn(TAG, "Unable to create external cache directory");
                 return null;
             }
         }

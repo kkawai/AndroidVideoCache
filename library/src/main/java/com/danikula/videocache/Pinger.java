@@ -1,7 +1,7 @@
 package com.danikula.videocache;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -32,7 +32,7 @@ import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
 class Pinger {
 
-    private static final Logger LOG = LoggerFactory.getLogger("Pinger");
+    private static final String TAG = "Pinger";
     private static final String PING_REQUEST = "ping";
     private static final String PING_RESPONSE = "ping ok";
 
@@ -59,9 +59,9 @@ class Pinger {
                     return true;
                 }
             } catch (TimeoutException e) {
-                LOG.warn("Error pinging server (attempt: " + attempts + ", timeout: " + timeout + "). ");
+                LOG.warn(TAG, "Error pinging server (attempt: " + attempts + ", timeout: " + timeout + "). ");
             } catch (InterruptedException | ExecutionException e) {
-                LOG.error("Error pinging server due to unexpected error", e);
+                LOG.error(TAG, "Error pinging server due to unexpected error", e);
             }
             attempts++;
             timeout *= 2;
@@ -70,7 +70,7 @@ class Pinger {
                         "If you see this message, please, report at https://github.com/danikula/AndroidVideoCache/issues/134. " +
                         "Default proxies are: %s"
                 , attempts, timeout / 2, getDefaultProxies());
-        LOG.error(error, new ProxyCacheException(error));
+        LOG.error(error, new ProxyCacheException(error).toString());
         return false;
     }
 
@@ -102,10 +102,10 @@ class Pinger {
             byte[] response = new byte[expectedResponse.length];
             source.read(response);
             boolean pingOk = Arrays.equals(expectedResponse, response);
-            LOG.info("Ping response: `" + new String(response) + "`, pinged? " + pingOk);
+            LOG.info(TAG, "Ping response: `" + new String(response) + "`, pinged? " + pingOk);
             return pingOk;
         } catch (ProxyCacheException e) {
-            LOG.error("Error reading ping response", e);
+            LOG.error(TAG, "Error reading ping response", e);
             return false;
         } finally {
             source.close();
